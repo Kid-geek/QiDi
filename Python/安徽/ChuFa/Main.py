@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import time
 
 def get_url(page_num):
+    time.sleep(2)
     url_list = []
     for num in range(1, int(page_num) + 1):
         url = 'http://www.creditah.gov.cn/AdministrativePenalty/index_' + str(page_num) + '.htm'

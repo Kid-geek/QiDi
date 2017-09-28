@@ -5,25 +5,22 @@ def get_url(page_num):
     time.sleep(2)
     url_list = []
     date={}
+    for num in range(1, int(page_num) + 1):
+        url = 'http://www.fjcredit.gov.cn/eap/credit.xymlFyJsSxbzxrlistqian'
+        header = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}
 
-    url = 'http://www.fjcredit.gov.cn/eap/credit.sgszzxklist'
-    header = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}
-    date['page'] = page_num
-    html = requests.post(url, data=date, headers=header).content.decode()
-
-    table_soup = BeautifulSoup(html, 'lxml')
-    table = table_soup.find(id='actionlist')
-    tbody_soup = BeautifulSoup(str(table), 'lxml')
-    tbody = tbody_soup.find('tbody')
-    tr_soup = BeautifulSoup(str(tbody), 'lxml')
-    tr = tr_soup.find_all('tr')
-    for item in tr:
-        td_soup = BeautifulSoup(str(item), 'lxml')
-        td = td_soup.find('a')['href']
-        url_list.append(td)
-    print('成功解析' + str(len(url_list)) + '个url')
+        date['page']=num
+        html = requests.post(url, data=date,headers=header).content.decode()
+        table_soup=BeautifulSoup(html,'lxml')
+        table=table_soup.find_all('table',class_='tab_info')
+        for item in table:
+            item_soup=BeautifulSoup(str(item),'lxml')
+            a=item_soup.find('a')['href']
+            print(a)
+            url_list.append(a)
+        print('成功解析'+str(len(url_list))+'个url')
     return url_list
-
 
 def get_info(url):
     time.sleep(2)
@@ -57,10 +54,7 @@ def get_info(url):
     return info_dict
 
 if __name__ == '__main__':
-    url_list=[]
-    for num in range(1,3):
-        url_list=get_url(num)
+    url_list=get_url(1)
     print('共'+str(len(url_list))+'个页面')
-
-    for url in url_list:
-        get_info(url)
+    # for url in url_list:
+    #     get_info(url)
