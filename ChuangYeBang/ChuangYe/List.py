@@ -63,10 +63,10 @@ if __name__ == '__main__':
     connection=connect_mysql('chuangye')
 
     # range第一个参数为起始页   第二个为终止页-1
-    for num in range(656,1000):
+    for num in range(2500,2501):
 
         # s=requests.session()
-        proxixy={'http':'114.99.84.57:31284'}
+        proxies = {"http": "125.112.170.5942397"}
 
         # time.sleep(random.randint(2,4))
 
@@ -74,7 +74,12 @@ if __name__ == '__main__':
         url = 'http://www.cyzone.cn/vcompany/list-0-0-' + str(num) + '-0-0/0'
         header = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}
-        html = requests.get(url, header, proxies=proxixy).content.decode()
+        try:
+            html = requests.get(url, header, proxies=proxies,timeout=20).content.decode()
+        except requests.exceptions.ReadTimeout:
+            print('try')
+            html = requests.get(url, header, proxies=proxies, timeout=20).content.decode()
+
         print(html)
         # 下载成功
         html_soup = BeautifulSoup(html, 'lxml')
